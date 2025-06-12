@@ -1,0 +1,115 @@
+:root{
+	--generalFontSize: 11pt;
+	--whiteSky: rgb(227, 246, 253);
+	--dullGreishBlue: rgb(54, 70, 77);
+	--burnedMetal: rgb(113, 104, 95);
+	--heatedMetal: rgb(76, 72, 60);
+	--electricBlue: rgb(45, 80, 185);
+	--lighterDullGreishBlue: rgb(80, 96, 102);
+	--color0: rgb(230, 230, 230);
+	--color1: rgb(54, 54, 66);
+	--color2: rgb(0, 186, 228);
+	--color3: rgb(255, 119, 78);
+	--color4: rgb(185, 112, 193);
+	--color5: rgb(250, 255, 115);
+	--color6: rgb(73, 149, 38);
+}
+
+*{
+	font-family: 'Lucida Bright';
+	font-size: var(--generalFontSize);
+	word-wrap: break-word;
+}
+
+body{
+	margin: 12px;
+}
+
+a{
+	color: var(--electricBlue);
+	text-decoration: none;
+	font-size: inherit;
+}
+
+a:hover{
+	text-decoration-line: underline;
+}
+
+p{
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+
+h1{
+	font-size: calc(var(--generalFontSize) + 5pt);
+	color: var(--burnedMetal);
+}
+
+h2{
+	font-size: calc(var(--generalFontSize) + 3pt);
+	color: var(--heatedMetal);
+}
+
+h3{
+	font-size: calc(var(--generalFontSize) + 1pt);
+	font-weight: bold;
+	margin-top: 6px;
+	margin-bottom: 6px;
+}
+
+img{
+	max-width: 100%;
+}
+
+ul, ol, dl{
+	margin: 2px;
+}
+
+ul{
+	list-style-type: none;
+	padding: 0;
+	margin-left: 30px;
+}
+
+ol{
+	padding: 0px;
+	margin-left: 30px;
+}
+
+dt{
+	font-weight: bold;
+}
+
+dd{
+	margin-left: 10px;
+}
+
+.Note{
+	margin: 5px;
+	background-color: var(--lighterDullGreishBlue);
+	color: var(--whiteSky);
+	padding: 15px;
+	border-radius: 8px;
+}
+
+.CodeDiv{
+	background-color: var(--color1);
+	white-space: pre;
+	tab-size: 4;
+	padding: 10px;
+	border-radius: 5px;
+	margin-top: 5px;
+	margin-bottom: 10px;
+	overflow-x: auto;
+	word-break: break-all;
+}
+
+.CodeDiv *{
+	font-family: "Consolas";
+}
+
+.CodeDivTitle{
+	font-size: calc(var(--generalFontSize) + 1pt);
+	color: var(--color0);
+	margin-bottom: 20px;
+}

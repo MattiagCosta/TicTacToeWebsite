@@ -1,0 +1,101 @@
+#include <fstream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+vector<string> GetMovesFromSequence(string sequence){
+	vector<string> moves = {};
+	string move = "";
+	for(char identifier : sequence){
+		if(identifier=='-'){
+			moves.push_back(move);
+			continue;
+		}
+		move+=identifier;
+	}
+	return moves;
+}
+
+vector<short> CountIdentifiers(string move){
+	short countA = 0, countB = 0, countC = 0, countD = 0, countE = 0;
+	for(char identifier : move){
+		switch(identifier){
+			case 'A':
+				countA++;
+				break;
+			case 'B':
+				countB++;
+				break;
+			case 'C':
+				countC++;
+				break;
+			case 'D':
+				countD++;
+				break;
+			case 'E':
+				countE++;
+				break;
+		}
+	}
+	return {countA, countB, countC, countD, countE};
+}
+
+bool AreSequencesSimilar(string sequence0, string sequence1){
+	vector<string> movesSequence0 = GetMovesFromSequence(sequence0);
+	vector<string> movesSequence1 = GetMovesFromSequence(sequence1);
+	if(movesSequence0.size()!=movesSequence1.size()){
+		return false;
+	}
+	for(short moveIndex = 0; moveIndex<movesSequence0.size(); moveIndex++){
+		if(CountIdentifiers(movesSequence0[moveIndex])!=CountIdentifiers(movesSequence1[moveIndex])){
+			return false;
+		}
+	}
+	return true;
+}
+
+int main(){
+	fstream tempDatabase;
+	ifstream universalSequencesDatabase("TicTacToeUniversalSequences.txt");
+	tempDatabase.open("TicTacToeTempDatabase.txt", ios::out | ios::trunc);
+	string universalSequencesDatabaseLine;
+	while(getline(universalSequencesDatabase, universalSequencesDatabaseLine)){
+		tempDatabase << universalSequencesDatabaseLine << endl;
+	}
+	tempDatabase.close();
+	universalSequencesDatabase.close();
+
+	universalSequencesDatabase.open("TicTacToeUniversalSequences.txt");
+	vector<int> linesToExclude = {};
+	string sequence0, sequence1;
+	int lineCountA = 0, lineCountB;
+	while(getline(universalSequencesDatabase, sequence0)){
+		lineCountB = 0;
+		tempDatabase.open("TicTacToeTempDatabase.txt", ios::in);
+		while(getline(tempDatabase, sequence1)){
+			if(lineCountA<lineCountB && AreSequencesSimilar(sequence0, sequence1) && find(linesToExclude.begin(), linesToExclude.end(), lineCountB)==linesToExclude.end()){
+				linesToExclude.push_back(lineCountB);
+			}
+			lineCountB++;
+		}
+		tempDatabase.close();
+		lineCountA++;
+	}
+	universalSequencesDatabase.close();
+
+	universalSequencesDatabase.open("TicTacToeUniversalSequences.txt");
+	ofstream universalSequencesDatabaseChanged("TicTacToeUniversalSequencesChanged.txt", ios::out | ios::trunc);
+	int lineCount = 0;
+	while(getline(universalSequencesDatabase, universalSequencesDatabaseLine)){
+		if(find(linesToExclude.begin(), linesToExclude.end(), lineCount)==linesToExclude.end()){
+			universalSequencesDatabaseChanged << universalSequencesDatabaseLine << endl;
+		}
+		lineCount++;
+	}
+	universalSequencesDatabase.close();
+	universalSequencesDatabaseChanged.close();
+
+	return 0;
+}

@@ -1,0 +1,15 @@
+Normal board: A B C D E F G H I
+Visualized like a square:
+A B C
+D E F
+G H I
+
+Rotation result: C F I B E H A D G
+
+Flip type 0 result: A B C D E F G H I
+
+Flip type 1 result: C B A F E D I H G
+
+Flip type 2 result: G H I D E F A B C
+
+Flip type 3 result: I H G F E D C B A

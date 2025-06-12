@@ -1,0 +1,29 @@
+def Get_codes(row):
+    char = 3
+    first_move = row[1]
+    codes = []
+    while char<len(row)-1:
+        code = ''
+        while char<len(row) and (row[char]!="'" and row[char]!='\n'):
+            code+=row[char]
+            char+=1
+        codes.append(code)
+        char+=1
+    return first_move, codes
+
+
+database = open('TicTacToeChanged.txt')
+cdatabase = open('TicTacToeCodes.txt', 'w')
+
+every_code = []
+for row0 in database:
+    if row0[0]!=' ': continue
+    first_move, codes = Get_codes(row0)
+    for code in codes:
+        if not first_move+code in every_code: every_code.append(first_move+code)
+
+every_code.sort()
+for code in every_code: cdatabase.write(code+'\n')
+
+database.close()
+cdatabase.close()

@@ -1,0 +1,11 @@
+progress
+1)362880
+2)630
+3)126
+4)23
+5)in TicTacToeDatabase.txt
+6)3->'0', 2->'2', 6->'12', 12->'1' (boards)
+6.1)(no algorithm) 8640->'0', 5760->'2', 17280->'12', 34560->'1', total=66240 (codes)
+7)in TicTacToeChanged.txt, total=54036;'0'=8640;'1'=31248;'2'=14148 (codes)
+8)in TicTacToeCodes.txt
+9)

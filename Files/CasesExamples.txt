@@ -1,0 +1,15 @@
+Case for center: CBCBPBCBC
+Case for corner: CDEBADPBC
+Case for middle outer square: DEDBABCPC
+
+The cases visualized as boards:
+
+C B C   C D E   D E D
+B P B   B A D   B A B
+C B C   P B C   C P C
+
+
+Matching the case with the move
+The "P" doesn't match the square where the move (1) is: 010000000 DEDBABCPC
+The case gets rotated, but "P" isn't still in the right position: 010000000 DBCEAPDBC
+The case gets rotated again, now "P" matches the right square: 010000000 CPCBABDED

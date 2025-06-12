@@ -1,0 +1,62 @@
+def Rotate_board(board):
+    return board[2]+board[5]+board[8]+board[1]+board[4]+board[7]+board[0]+board[3]+board[6]
+
+def Flip_board(flip, board):
+    if flip==0: return board
+    if flip==1: return board[2]+board[1]+board[0]+board[5]+board[4]+board[3]+board[8]+board[7]+board[6]
+    if flip==2: return board[6]+board[7]+board[8]+board[3]+board[4]+board[5]+board[0]+board[1]+board[2]
+    if flip==3: return board[8]+board[7]+board[6]+board[5]+board[4]+board[3]+board[2]+board[1]+board[0]
+
+def Get_board(row):
+        board = ''
+        char = 0
+        while row[char]!='\n':
+            if row[char]=='1' or row[char]=='2': board+=row[char]
+            char+=1
+        return board
+
+def Stamp_board(board):
+    c = 0
+    for i in board:
+        if c!=0 and c%3==0: print()
+        print(i, end=' ')
+        c+=1
+    print()
+
+database = open('TicTacToeBoards.txt')
+temp = open('TicTacToeTempDatabase.txt', 'w')
+for a in database:
+    temp.write(a)
+
+database.close()
+temp.close()
+database = open('TicTacToeBoards.txt')
+
+rows = []
+
+a = 1
+for row0 in database:
+    board = Get_board(row0)
+    
+    for i in range(4):
+        board = Rotate_board(board)
+        for e in range(4):
+            new_board = Flip_board(e, board)
+            b = 1
+            temp = open('TicTacToeTempDatabase.txt')
+            for row1 in temp:
+                if Get_board(row1)==new_board and a<b:
+                    rows.append(b)
+                b+=1
+            temp.close()
+
+    a+=1
+
+database.close()
+
+bdatabase = open('TicTacToeBoards.txt')
+database = open('TicTacToeBoardsChanged.txt', 'w')
+b = 1
+for a in bdatabase:
+    if not b in rows: database.write(str(b)+'.'+a)
+    b+=1

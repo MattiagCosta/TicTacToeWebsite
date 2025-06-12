@@ -1,0 +1,37 @@
+#include <fstream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+int main(){
+	// Loading the codes' numbers from TicTacToeCodesChanged.txt which were already saved
+	vector<string> codesNumbers = {}; // These are the lines where the codes in this list where found in TicTacToeCodes.txt
+	
+	fstream codesChangedDatabase;
+	codesChangedDatabase.open("TicTacToeCodesChanged.txt", ios::in);
+	string codesChangedDatabaseLine;
+	while(getline(codesChangedDatabase, codesChangedDatabaseLine)){
+		codesNumbers.push_back(codesChangedDatabaseLine);
+	}
+	codesChangedDatabase.close();
+
+
+	// Saving the unique codes
+	codesChangedDatabase.open("TicTacToeCodesChanged.txt", ios::out | ios::trunc);
+	ifstream codesDatabase("TicTacToeCodes.txt");
+	int lineNumber = 0;
+	string codeDatabaseLine;
+	while(getline(codesDatabase, codeDatabaseLine)){
+		if(find(codesNumbers.begin(), codesNumbers.end(), to_string(lineNumber))==codesNumbers.end()){
+			codesChangedDatabase << codeDatabaseLine << endl;
+		}
+		lineNumber++;
+	}
+	codesChangedDatabase.close();
+	codesDatabase.close();
+	
+
+	return 0;
+}

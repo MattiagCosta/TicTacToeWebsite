@@ -1,0 +1,90 @@
+database0 = open('TicTacToeDatabase0.txt', 'w')
+database1 = open('TicTacToeDatabase1.txt', 'w')
+database2 = open('TicTacToeDatabase2.txt', 'w')
+database3 = open('TicTacToeDatabase3.txt', 'w')
+database4 = open('TicTacToeDatabase4.txt', 'w')
+database5 = open('TicTacToeDatabase5.txt', 'w')
+database6 = open('TicTacToeDatabase6.txt', 'w')
+database7 = open('TicTacToeDatabase7.txt', 'w')
+database8 = open('TicTacToeDatabase8.txt', 'w')
+
+
+board0 = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+for a in range(9): #1
+    board1 = []
+    board1.extend(board0)
+    board1.pop(a)
+    board1.insert(a, 1)
+    for b in range(9): #2
+        board2 = []
+        board2.extend(board1)
+        if board1[b]!=0: continue
+        board2.pop(b)
+        board2.insert(b, 2)
+        for c in range(9): #3
+            board3 = []
+            board3.extend(board2)
+            if board2[c]!=0: continue
+            board3.pop(c)
+            board3.insert(c, 1)
+            for d in range(9): #4
+                board4 = []
+                board4.extend(board3)
+                if board3[d]!=0: continue
+                board4.pop(d)
+                board4.insert(d, 2)
+                for e in range(9):# 5
+                    board5 = []
+                    board5.extend(board4)
+                    if board4[e]!=0: continue
+                    board5.pop(e)
+                    board5.insert(e, 1)
+                    for f in range(9): #6
+                        board6 = []
+                        board6.extend(board5)
+                        if board5[f]!=0: continue
+                        board6.pop(f)
+                        board6.insert(f, 2)
+                        for g in range(9): #7
+                            board7 = []
+                            board7.extend(board6)
+                            if board6[g]!=0: continue
+                            board7.pop(g)
+                            board7.insert(g, 1)
+                            for h in range(9): #8
+                                board8 = []
+                                board8.extend(board7)
+                                if board7[h]!=0: continue
+                                board8.pop(h)
+                                board8.insert(h, 2)
+                                for i in range(9): #9
+                                    board9 = []
+                                    board9.extend(board8)
+                                    if board8[i]!=0: continue
+                                    board9.pop(i)
+                                    board9.insert(i, 1)
+                                    code = str(b)+str(c)+str(d)+str(e)+str(f)+str(g)+str(h)+str(i)
+                                    print(str(a)+code)
+                                    towrite = code+':'+str(board9)+'\\n'
+                                    if a==0: database0.write(towrite)
+                                    if a==1: database1.write(towrite)
+                                    if a==2: database2.write(towrite)
+                                    if a==3: database3.write(towrite)
+                                    if a==4: database4.write(towrite)
+                                    if a==5: database5.write(towrite)
+                                    if a==6: database6.write(towrite)
+                                    if a==7: database7.write(towrite)
+                                    if a==8: database8.write(towrite)
+
+
+
+database0.close()
+database1.close()
+database2.close()
+database3.close()
+database4.close()
+database5.close()
+database6.close()
+database7.close()
+database8.close()

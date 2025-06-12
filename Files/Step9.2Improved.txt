@@ -1,0 +1,86 @@
+#include <fstream>
+#include <vector>
+#include <string>
+#include <unordered_map>
+#include <algorithm> // For std::find
+
+using namespace std;
+
+string MutateCode(string code, unordered_map<char, char> mutationRules){
+	string newCode = "";
+	for(char move : code){
+		newCode+=mutationRules[move];
+	}
+	return newCode;
+}
+
+string RotateCode(string code){
+	return MutateCode(code, {{'0', '6'}, {'1', '3'}, {'2', '0'}, {'3', '7'}, {'4', '4'}, {'5', '1'}, {'6', '8'}, {'7', '5'}, {'8', '2'}});
+}
+
+string FlipCode(int flippingType, string code){
+	switch(flippingType){
+	case 0: return code;
+	case 1: return MutateCode(code, {{'0', '2'}, {'1', '1'}, {'2', '0'}, {'3', '5'}, {'4', '4'}, {'5', '3'}, {'6', '8'}, {'7', '7'}, {'8', '6'}});
+	case 2: return MutateCode(code, {{'0', '6'}, {'1', '7'}, {'2', '8'}, {'3', '3'}, {'4', '4'}, {'5', '5'}, {'6', '0'}, {'7', '1'}, {'8', '2'}});
+	case 3: return MutateCode(code, {{'0', '8'}, {'1', '7'}, {'2', '6'}, {'3', '5'}, {'4', '4'}, {'5', '3'}, {'6', '2'}, {'7', '1'}, {'8', '0'}});
+	}
+}
+
+int main(){
+	// Loading the codes' numbers from TicTacToeCodesChanged.txt which were already saved
+	vector<string> codesNumbers = {}; // These are the lines where the codes in this list where found in TicTacToeCodes.txt
+	
+	fstream codesChangedDatabase;
+	codesChangedDatabase.open("TicTacToeCodesChanged.txt", ios::in);
+	string codesChangedDatabaseLine;
+	while(getline(codesChangedDatabase, codesChangedDatabaseLine)){
+		codesNumbers.push_back(codesChangedDatabaseLine);
+	}
+	codesChangedDatabase.close();
+
+	// Comparing codes
+	ifstream codesDatabase("TicTacToeCodes.txt");
+	int a = 0;
+	int cycleCount = 6; // Ran 6 times, first time it was 0, then plus one each time, and an extra time to be sure
+	int codesNumbersAtTheTime = 9006;
+	string codesDatabaseLine;
+	while(getline(codesDatabase, codesDatabaseLine)){
+		if(a<cycleCount*codesNumbersAtTheTime){
+			a++;
+			continue;
+		}
+		string codeAtCodesDatabaseLine = codesDatabaseLine;
+		for(short rotation = 0; rotation<2; rotation++){
+			for(short flippingType = 0; flippingType<4; flippingType++){
+				string flippedCode = FlipCode(flippingType, codeAtCodesDatabaseLine);
+				ifstream tempDatabase("TicTacToeTempDatabase.txt");
+				int b = 0;
+				string tempDatabaseLine;
+				while(getline(tempDatabase, tempDatabaseLine)){
+					if(a<b && tempDatabaseLine==flippedCode && find(codesNumbers.begin(), codesNumbers.end(), to_string(b))==codesNumbers.end()){
+						codesNumbers.push_back(to_string(b));
+					}
+					b++;
+				}
+				tempDatabase.close();
+			}
+			codeAtCodesDatabaseLine = RotateCode(codeAtCodesDatabaseLine);
+		}
+		a++;
+		if(a==(cycleCount+1)*codesNumbersAtTheTime){
+			break;
+		}
+	}
+	codesDatabase.close();
+
+	// Saving codes' numbers to database
+	codesChangedDatabase.open("TicTacToeCodesChanged.txt", ios::out | ios::trunc);
+	for(string codeNumber : codesNumbers){
+		codesChangedDatabase << codeNumber << endl;
+	}
+	codesChangedDatabase.close();
+	
+
+	return 0;
+}

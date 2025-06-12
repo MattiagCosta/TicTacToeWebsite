@@ -1,0 +1,135 @@
+def Get_codes(row):
+    char = 0
+    first_move = row[1]
+    codes = []
+    while True:
+        while row[char]!="'" and row[char]!=']': char+=1
+        if row[char]==']': break
+        char+=1
+        code = ''
+        for i in range(8):
+            code+=row[char]
+            char+=1
+        codes.append(code)
+        char+=1
+    return first_move, codes
+
+def Get_win(row):
+    char = 0
+    while row[char]!=' ':
+        char+=1
+    return row[char+1]
+
+def Get_number(row):
+    char = 0
+    number = ''
+    while row[char]!='.':
+        number+=row[char]
+        char+=1
+    return number
+
+
+changed = open('TicTacToechanged.txt', 'w')
+database = open('TicTacToeDatabase.txt')
+
+total_count = 0
+total_count0 = 0
+total_count1 = 0
+total_count2 = 0
+all_codes = []
+
+tie = True
+to_write = []
+
+for row0 in database:
+    if row0[0]!=' ':
+        if not tie:
+            for row in to_write:
+                if row[0]!=' ': changed.write(row+f': 1 -{count1}, 2 -{count2}\n')
+                else: changed.write(row)
+        to_write.clear()
+        count1 = 0
+        count2 = 0
+
+        number = Get_number(row0)
+
+        wdatabase = open('TicTacToeWins.txt')
+        for row1 in wdatabase:
+            if number==Get_number(row1):
+                if Get_win(row1)=='0': tie = True
+                else: tie = False
+                break
+        wdatabase.close()
+
+        char = 0
+        word = ''
+        while row0[char]!='\n':
+            word+=row0[char]
+            char+=1
+        if tie: changed.write(word+': 0 -2880\n')
+        else: to_write.append(word)
+        continue
+
+    first_move, codes = Get_codes(row0)
+
+    if tie:
+        total_count+=576
+        total_count0+=576
+        string = ' '+first_move+'_'
+        for i in codes:
+            string+=i+"'"
+        changed.write(string+'\n')
+        continue
+
+    new_codes = []
+
+    for code in codes:
+        board = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        board.pop(int(first_move))
+        board.insert(int(first_move), 1)
+
+        for move in range(8):
+            board.pop(int(code[move]))
+            board.insert(int(code[move]), abs(move%2-2))
+
+            if (board[0]==board[4]==board[8] or board[2]==board[4]==board[6] or board[1]==board[4]==board[7] or board[3]==board[4]==board[5]) and board[4]!=0:
+                winner = board[4]
+                break
+            if (board[0]==board[1]==board[2] or board[0]==board[3]==board[6]) and board[0]!=0:
+                winner = board[0]
+                break
+            if (board[2]==board[5]==board[8] or board[6]==board[7]==board[8]) and board[8]!=0:
+                winner = board[8]
+                break
+        
+        while 0 in board: board.remove(0)
+
+        new_code = ''
+        for char in range(len(board)-1):
+            new_code+=code[char]
+        
+        if not first_move+new_code in all_codes: total_count+=1
+        if not first_move+new_code in all_codes and winner==1: total_count1+=1
+        if not first_move+new_code in all_codes and winner==2: total_count2+=1
+
+        if not new_code in new_codes:
+            new_codes.append(new_code)
+            all_codes.append(first_move+new_code)
+            if winner==1: count1+=1
+            else: count2+=1
+        
+
+    string = ' '+first_move+'_'
+    for i in new_codes:
+        string+=i+"'"
+    to_write.append(string+'\n')
+if not tie:
+            for row in to_write:
+                if row[0]!=' ': changed.write(row+f': 1 -{count1},2 -{count2}\n')
+                else: changed.write(row)
+
+
+changed.close()
+database.close()
+
+print(total_count, total_count0, total_count1, total_count2)

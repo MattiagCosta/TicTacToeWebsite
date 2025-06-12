@@ -1,0 +1,40 @@
+def Get_board(row):
+        board = ''
+        char = 0
+        while row[char]!='[': char+=1
+        while row[char]!='\n':
+            if row[char]=='1' or row[char]=='2': board+=row[char]
+            char+=1
+        return board
+
+def Get_row(row):
+    num = ''
+    char = 0
+    while row[char]!='[':
+         num+=row[char]
+         char+=1
+    return num
+
+database = open('TicTacToeBoardsChanged.txt')
+temp = open('TicTacToeWins.txt', 'w')
+
+for row in database:
+    wins = []
+    board = Get_board(row)
+
+    if board[0]==board[4]==board[8] or board[2]==board[4]==board[6] or board[1]==board[4]==board[7] or board[3]==board[4]==board[5]:
+        wins.append(board[4])
+    if board[0]==board[1]==board[2] or board[0]==board[3]==board[6]:
+        if not board[0] in wins: wins.append(board[0])
+    if board[2]==board[5]==board[8] or board[6]==board[7]==board[8]:
+        if not board[8] in wins: wins.append(board[8])
+    if len(wins)==0: wins.append('0')
+
+    temp.write(Get_row(row)+' ')
+    wins.sort()
+    for i in wins:
+        temp.write(i)
+    temp.write('\n')
+
+database.close()
+temp.close()

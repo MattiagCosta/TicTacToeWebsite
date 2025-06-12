@@ -1,0 +1,69 @@
+#include <fstream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+string similarMovesCaseA = "CBCBPBCBC";
+string similarMovesCaseB = "CDEBADPBC";
+string similarMovesCaseC = "DEDBABCPC";
+
+string MatchSimilarMovesCaseDirectionWithMove(string similarMovesCase, char move){
+	while(similarMovesCase[move-'0']!='P'){
+		string temp = "";
+		temp+=similarMovesCase[2];
+		temp+=similarMovesCase[5];
+		temp+=similarMovesCase[8];
+		temp+=similarMovesCase[1];
+		temp+=similarMovesCase[4];
+		temp+=similarMovesCase[7];
+		temp+=similarMovesCase[0];
+		temp+=similarMovesCase[3];
+		temp+=similarMovesCase[6];
+		similarMovesCase = temp;
+	}
+	return similarMovesCase;
+}
+
+string MakeSequenceUniversal(string sequence){
+	string universalSequence = "";
+	vector<string> casesToConsider = {similarMovesCaseA};
+	for(char move : sequence){
+		if(casesToConsider.size()!=1){
+			universalSequence+='-';
+		}
+		if(move=='4'){
+			universalSequence+='A';
+			casesToConsider.push_back(similarMovesCaseA);
+			continue;
+		}
+		for(string similarMovesCase : casesToConsider){
+			universalSequence+=similarMovesCase[move-'0'];
+		}
+		switch(move){
+			case '0':
+			case '2':
+			case '6':
+			case '8':
+				casesToConsider.push_back(MatchSimilarMovesCaseDirectionWithMove(similarMovesCaseB, move));
+				break;
+			default:
+				casesToConsider.push_back(MatchSimilarMovesCaseDirectionWithMove(similarMovesCaseC, move));
+				break;
+		}
+	}
+	return universalSequence;
+}
+
+int main(){
+	ifstream codesChangedDatabase("TicTacToeCodesChanged.txt");
+	ofstream universalSequencesDatabase("TicTacToeUniversalSequences.txt", ios::trunc);
+	string codesChangedDatabaseLine;
+	while(getline(codesChangedDatabase, codesChangedDatabaseLine)){
+		universalSequencesDatabase << MakeSequenceUniversal(codesChangedDatabaseLine) << endl;
+	}
+	codesChangedDatabase.close();
+	universalSequencesDatabase.close();
+
+	return 0;
+}

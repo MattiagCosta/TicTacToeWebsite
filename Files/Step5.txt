@@ -1,0 +1,41 @@
+def Get_board(row):
+        board = ''
+        char = 0
+        while row[char]!='[': char+=1
+        while row[char]!=']':
+            if row[char]=='1' or row[char]=='2': board+=row[char]
+            char+=1
+        return board
+
+def Get_code(row):
+    char = 0
+    code = ''
+    while row[char]!=':': char+=1
+    char+=1
+    while row[char]!='\n':
+        code+=row[char]
+        char+=1
+    return code
+
+
+database = open('TicTacToeBoardsChanged.txt')
+codes = open('TicTacToeDatabase.txt', 'w')
+
+for row0 in database:
+    board0 = Get_board(row0)
+
+    codes.write(row0)
+
+    for first_move in range(9):
+        changed = open('TicTacToeChanged'+str(first_move)+'.txt')
+
+        for row1 in changed:
+            board1 = Get_board(row1)
+            if board0==board1:
+                codes.write(' '+str(first_move)+'_'+Get_code(row1)+'\n')
+                break
+
+        changed.close()
+
+database.close()
+codes.close()

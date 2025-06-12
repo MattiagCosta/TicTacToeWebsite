@@ -1,0 +1,86 @@
+def Get_code(row):
+    char = 0
+    code = ''
+    while row[char]!='\n':
+        code+=row[char]
+        char+=1
+    return code
+
+def Change_code(new_moves, code):
+    new_code = ''
+    for move in code:
+        new_code+=new_moves[move]
+    return new_code
+
+def Rotate_code(code):
+    return Change_code({'0':'6', '1':'3', '2':'0', '3':'7', '4':'4', '5':'1', '6':'8', '7':'5', '8':'2'}, code)
+
+def Flip_code(flip, code):
+    new_code = ''
+
+    if flip==0: return code
+    if flip==1: return Change_code({'0':'2', '1':'1', '2':'0', '3':'5', '4':'4', '5':'3', '6':'8', '7':'7', '8':'6'}, code)
+    if flip==2: return Change_code({'0':'6', '1':'7', '2':'8', '3':'3', '4':'4', '5':'5', '6':'0', '7':'1', '8':'2'}, code)
+    if flip==3: return Change_code({'0':'8', '1':'7', '2':'6', '3':'5', '4':'4', '5':'3', '6':'2', '7':'1', '8':'0'}, code)
+
+    return new_code
+
+#c = '012678'
+#for i in range(4):
+#    c = Rotate_code(c)
+#    print(Flip_code(0, c), Flip_code(1, c), Flip_code(2, c), Flip_code(3, c))
+#exit()
+"""temp = open('TicTacToeTempDatabase.txt', 'w')
+database = open('TicTacToeCodes.txt')
+for row in database:
+    temp.write(row)
+database.close()
+temp.close()
+phase 9.1"""
+every_code = []
+cdatabase = open('TicTacToeCodesChanged.txt')
+for code in cdatabase:
+    every_code.append(Get_code(code))
+cdatabase.close()
+
+database = open('TicTacToeCodes.txt')
+
+a=0
+time = 7 #to do 7... next one: 8
+for row0 in database:
+    if a<time*1501:
+        a+=1
+        continue
+    code = Get_code(row0)
+    new_code = code
+    for u in range(2):
+        new_code = Rotate_code(new_code)
+        for f in range(4):
+            flipped = Flip_code(f, new_code)
+            temp = open('TicTacToeTempDatabase.txt')
+            b = 0
+            for row1 in temp:
+                if a<b and Get_code(row1)==flipped and not str(b) in every_code: every_code.append(str(b))
+                b+=1
+            temp.close()
+    #print(len(every_code), a)
+    a+=1
+    if a==(time+1)*1501: break
+
+database.close()
+
+temp = open('TicTacToeCodesChanged.txt', 'w')
+for code in every_code:
+    temp.write(code+'\n')
+temp.close()
+#phase 9.2, reapiting with pauses (1501 codes each time)
+"""
+database = open('TicTacToeCodes.txt')
+changed = open('TicTacToeCodesChanged.txt', 'a')
+
+for code in database:
+    if not Get_code(code) in every_code: changed.write(code+'\n')
+
+database.close()
+changed.close()
+phase 9.3"""

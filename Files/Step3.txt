@@ -1,0 +1,37 @@
+temp_database = open('TicTacToeTempDatabase.txt', 'w')
+temp_database.close()
+
+def Get_board(row):
+        board = ''
+        char = 0
+        while row[char]!=':':
+            board+=row[char]
+            char+=1
+        return board
+
+first_move = 0
+while first_move<9:
+    first_move = str(first_move)
+    database = open('TicTacToeChanged'+first_move+'.txt')
+    temp_database = open('TicTacToeTempDatabase.txt', 'a')
+
+    for row0 in database:
+        temp_database.write(Get_board(row0)+'\n')
+
+    database.close()
+    temp_database.close()
+    first_move = int(first_move)
+    first_move+=1
+
+database = open('TicTacToeTempDatabase.txt')
+bdatabase = open('TicTacToeBoards.txt', 'w')
+
+boards = []
+
+for row0 in database:
+     if row0 in boards: continue
+     bdatabase.write(row0)
+     boards.append(row0)
+
+database.close()
+bdatabase.close()
